@@ -8,11 +8,11 @@ import (
 var DB *gorm.DB
 
 func DBConnenction() (*gorm.DB, error) {
-	user := "root"
-	pass := "mysql"
+	user := "haydar"
+	pass := "252525"
 	ip := "127.0.0.1"
 	port := "3306"
-	dbname := "db_ytl"
+	dbname := "belajarapi"
 
 	dsn := user + ":" + pass + "@tcp(" + ip + ":" + port + ")/" + dbname + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})

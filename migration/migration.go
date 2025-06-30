@@ -12,8 +12,9 @@ func AutoMigration() error {
 	}
 
 	err = db.AutoMigrate(
-		// &model.Petugas{},
+		&model.Petugas{},
 		&model.Buku{},
+		&model.Rak{},
 	)
 	if err != nil {
 		return err
