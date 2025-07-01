@@ -12,7 +12,7 @@ type Buku struct {
 }
 
 type BukuResponse struct {
-	Id          int    `json:"id"`
+	ID          int    `json:"id"`
 	Judul       string `json:"judul"`
 	Penulis     string `json:"penulis"`
 	TahunTerbit int    `json:"tahun_terbit"`
@@ -30,7 +30,7 @@ func ReadBuku(db *gorm.DB) ([]BukuResponse, error) {
 	var response []BukuResponse
 	for _, b := range bukuList {
 		response = append(response, BukuResponse{
-			Id:          b.ID,
+			ID:          b.ID,
 			Judul:       b.Judul,
 			Penulis:     b.Penulis,
 			TahunTerbit: b.TahunTerbit,
@@ -42,10 +42,23 @@ func ReadBuku(db *gorm.DB) ([]BukuResponse, error) {
 	return response, nil
 }
 
-func GetBukuById(db *gorm.DB, id int) (Buku, error) {
+func GetBukuById(db *gorm.DB, id int) (BukuResponse, error) {
 	var buku Buku
-	err := db.First(&buku, id).Error
-	return buku, err
+	err := db.Preload("Rak").First(&buku, id).Error
+	if err != nil {
+		return BukuResponse{}, err
+	}
+
+	response := BukuResponse{
+		ID:          buku.ID,
+		Judul:       buku.Judul,
+		Penulis:     buku.Penulis,
+		TahunTerbit: buku.TahunTerbit,
+		RakID:       buku.RakID,
+		RakNama:     buku.Rak.Nama,
+	}
+
+	return response, nil
 }
 
 func CreateBuku(db *gorm.DB, buku Buku) error {
